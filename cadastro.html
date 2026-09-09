@@ -8,7 +8,7 @@
 </head>
 <body>
     <h1>Cadastro de clientes</h1>
-    <form>
+    <form id = "form_cadastro">
         <label for="nome">Nome:</label>
         <input type="text" id="nome" placeholder="Digite seu nome aqui" required>
         <label for="celular">Celular:</label>
@@ -22,7 +22,44 @@
         <p>Já possui conta?<a href="./login.html"> Fazer login</a></p>
 
 
-        <input type="submit" value="Entrar" class="btn_enviar"> 
+        <input type="submit" id = "btn_enviar" value="Entrar" class="btn_enviar"> 
         </form>
+
+     <script>
+        function pegar_dados() {
+             const dados = {
+                Nome: document.getElementById("Nome").value,
+                Celular: document.getElementById("Celular").value,
+                Cpf: document.getElementById("Cpf").value,
+                Email: document.getElementById("Email").value,
+                Senha: document.getElementById("Senha").value,
+            }
+            return dados
+        }
+        const form = document.getElementById("form_cadastro")
+        const btn_enviar = document.getElementById("btn_enviar")
+        form.addEventlistener("submit", async (event) => {
+            event.preventDefault()
+            btn_enviar.disabled = true
+            btn_enviar.value = "enviando..."
+            const dados = pegar_dados()
+            try{
+                 const resposta = await ferch("http://10.216.243.142:3000/cliente",{
+                 method: "POST",
+                 headers: {"Content-Type": "application/json" },
+                 body: JSON.stringfi(dados)
+            }
+        )
+        if (!respota.ok) throw new Error("erro na API")
+        alert("o cadastro foi realizado!")
+        form.reset()
+    }catch (error){
+        alert(error)
+    } finally {
+        btn_enviar.disabled = false
+        btn_enviar.value = "enviar cadastro"
+    }
+})
+        </script>
 </body>
 </html>
