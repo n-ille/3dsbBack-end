@@ -28,29 +28,30 @@
      <script>
         function pegar_dados() {
              const dados = {
-                Nome: document.getElementById("Nome").value,
-                Celular: document.getElementById("Celular").value,
-                Cpf: document.getElementById("Cpf").value,
-                Email: document.getElementById("Email").value,
-                Senha: document.getElementById("Senha").value,
+                nome: document.getElementById("nome").value,
+                celular: document.getElementById("celular").value,
+                cpf: document.getElementById("cpf").value,
+                email: document.getElementById("email").value,
+                senha: document.getElementById("senha").value,
             }
             return dados
         }
         const form = document.getElementById("form_cadastro")
         const btn_enviar = document.getElementById("btn_enviar")
-        form.addEventlistener("submit", async (event) => {
+        form.addEventListener("submit", async (event) => {
             event.preventDefault()
             btn_enviar.disabled = true
             btn_enviar.value = "enviando..."
             const dados = pegar_dados()
             try{
-                 const resposta = await ferch("http://10.216.243.142:3000/cliente",{
+                 const resposta = await fetch(
+                    "http://10.216.243.142:3000/cliente", {
                  method: "POST",
                  headers: {"Content-Type": "application/json" },
-                 body: JSON.stringfi(dados)
+                 body: JSON.stringify(dados)
             }
         )
-        if (!respota.ok) throw new Error("erro na API")
+        if (!resposta.ok) throw new Error("erro na API")
         alert("o cadastro foi realizado!")
         form.reset()
     }catch (error){
