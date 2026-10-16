@@ -1,27 +1,19 @@
-// npm init
-// npm i express
-const express = require("express")
-const app = express()
-const port = 3000
-app.use(express.json())
-
-// npm i mysql2
-const db = require("./db")
-
-// npm i bcrypt
-const bcrypt = require("bcrypt")
-
-// npm i jsonwebtoken
-const jwt = require("jsonwebtoken")
-
-// npm i dotenv
 const dotenv = require("dotenv")
 dotenv.config()
 
-// npm i cors
+const express = require("express")
+const app = express()
+const port = process.env.API_PORT
+app.use(express.json())
+
+const db = require("./db")
+
+const bcrypt = require("bcrypt")
+
+const jwt = require("jsonwebtoken")
+
 const cors = require("cors")
 app.use(cors())
-
 
 app.post("/cliente", async (req, res) => {
     try {
@@ -29,7 +21,6 @@ app.post("/cliente", async (req, res) => {
         const senhaCript = bcrypt.hashSync(cliente.senha, 10)
         cliente.senha = senhaCript
 
-        // envio para o BD
         const resultado = await db.pool.query(
             `INSERT INTO cliente (
                 nome, cpf, celular, email, senha
@@ -94,7 +85,6 @@ app.listen(port, () => {
     console.log("API rodando na porta " + port)
 })
 
-// https://dontpad.com/backendapi
 function autenticar(req, res, next){
     const authHeader = req.headers['authorization']
     const token = authHeader && authHeader.split(' ')[1]
@@ -107,5 +97,3 @@ function autenticar(req, res, next){
         next()
     })   
 }
-
-// AULA DE 18/09: TESTAR O LOGIN E A AUTENTICAÇÃO NA ROTA /cliente/perfil
